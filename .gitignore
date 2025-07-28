@@ -1,0 +1,27 @@
+# Large data directories (can be regenerated)
+logs/
+trained_models/
+
+# Temporary and cache files
+*.pkl
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.directory
+
+# Large output files (can be regenerated)
+output.txt
+
+# Notebook checkpoints
+.ipynb_checkpoints/ 

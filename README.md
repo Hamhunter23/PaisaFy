@@ -5,11 +5,20 @@ An intelligent algorithmic trading bot that combines sentiment analysis, technic
 ## 🌟 Features
 
 ### Core Trading Features
+- **Deep Reinforcement Learning**: Advanced ML ensemble using A2C, DDPG, and PPO algorithms for trading decisions
 - **Sentiment Analysis**: Uses FinBERT (Financial BERT) to analyze news sentiment for trading decisions
 - **Technical Analysis**: Implements SMA (Simple Moving Average) crossover strategies (50-day vs 200-day)
-- **Automated Trading**: Executes buy/sell orders automatically based on combined sentiment and technical signals
+- **Automated Training**: Comprehensive ML model training pipeline with FinRL framework
+- **Automated Trading**: Executes buy/sell orders automatically based on combined ML, sentiment and technical signals
 - **Risk Management**: Implements bracket orders with take-profit and stop-loss levels
 - **Position Sizing**: Intelligent cash allocation based on configurable risk parameters
+
+### Machine Learning & AI
+- **Ensemble Methods**: Combines multiple DRL algorithms (A2C, DDPG, PPO) for robust decision making
+- **Feature Engineering**: Automated technical indicator calculation and turbulence indexing
+- **Model Training**: Complete pipeline from data preprocessing to model deployment
+- **TensorBoard Integration**: Real-time training monitoring and visualization
+- **Model Persistence**: Trained models saved in `.zip` format for reuse and deployment
 
 ### Monitoring & Reliability
 - **Email Notifications**: Automated email alerts for bot status, errors, and crashes
@@ -26,7 +35,10 @@ An intelligent algorithmic trading bot that combines sentiment analysis, technic
 ## 🏗️ Architecture
 
 ```
-├── tradingbot.py          # Main trading strategy implementation
+├── tradingbot.py          # Main trading strategy implementation (sentiment-based)
+├── tradingbot2.py         # Alternative trading strategy implementation
+├── tradingbot_train.py    # ML model training pipeline
+├── DRLEnsemble.py         # Deep Reinforcement Learning ensemble framework
 ├── runner.py              # Bot supervisor with auto-restart functionality
 ├── finbert_utils.py       # FinBERT sentiment analysis utilities
 ├── news.py                # News data retrieval functions
@@ -35,7 +47,11 @@ An intelligent algorithmic trading bot that combines sentiment analysis, technic
 ├── mailtest.py           # Email notification testing
 ├── requirements.txt      # Python dependencies
 ├── bot_state.pkl         # Trading state persistence file
-└── logs/                 # Trading logs, statistics, and tearsheets
+├── output.txt            # Training execution logs
+├── logs/                 # Trading logs, statistics, and tearsheets
+├── results/              # Trading performance results and charts
+├── trained_models/       # Pre-trained DRL models (A2C, DDPG, PPO)
+└── tensorboard_log/      # TensorBoard training logs for monitoring
 ```
 
 ## 🛠️ Installation
@@ -56,6 +72,9 @@ pip install -r requirements.txt
 - **alpaca-trade-api**: Alpaca brokerage integration
 - **transformers**: Hugging Face transformers for FinBERT
 - **torch**: PyTorch for machine learning
+- **stable-baselines3**: Deep reinforcement learning algorithms
+- **finrl**: Financial reinforcement learning framework
+- **tensorboard**: ML model training visualization
 - **yfinance**: Yahoo Finance data
 - **pandas**: Data manipulation
 - **matplotlib/plotly**: Data visualization
@@ -89,12 +108,24 @@ strategy = PaisaFy(name='mlstrat', broker=broker,
 
 ## 🚀 Usage
 
+### Training ML Models
+```bash
+# Train DRL ensemble models (A2C, DDPG, PPO)
+python tradingbot_train.py
+
+# Monitor training with TensorBoard
+tensorboard --logdir=tensorboard_log
+```
+
 ### Running the Bot
 ```bash
-# Direct execution
+# Direct execution (sentiment-based strategy)
 python tradingbot.py
 
-# With auto-restart functionality
+# Alternative strategy
+python tradingbot2.py
+
+# With auto-restart functionality and training
 python runner.py
 ```
 
@@ -120,14 +151,22 @@ python news.py
 python mailtest.py
 ```
 
-## 📊 Trading Strategy
+## 📊 Trading Strategies
 
-### Buy Signals
+### Deep Reinforcement Learning Strategy (DRLEnsemble)
+- **Algorithms**: A2C (Advantage Actor-Critic), DDPG (Deep Deterministic Policy Gradient), PPO (Proximal Policy Optimization)
+- **Training Data**: Historical stock data with technical indicators (SMA, RSI, MACD, etc.)
+- **Features**: 11-dimensional state space including price, volume, and technical indicators
+- **Ensemble Approach**: Combines predictions from multiple DRL models for robust decision making
+- **Turbulence Detection**: Incorporates market turbulence index for risk assessment
+
+### Sentiment-Based Strategy (tradingbot.py)
+#### Buy Signals
 - **Sentiment**: Positive news sentiment with >97% confidence
 - **Technical**: 50-day SMA above 200-day SMA (bullish trend)
 - **Execution**: Market buy with 20% take-profit and 5% stop-loss
 
-### Sell Signals
+#### Sell Signals
 - **Sentiment**: Negative news sentiment with >97% confidence
 - **Technical**: 50-day SMA below 200-day SMA (bearish trend)
 - **Execution**: Market sell with 20% take-profit and 5% stop-loss
@@ -136,6 +175,7 @@ python mailtest.py
 - Configurable cash-at-risk percentage (default: 50%)
 - Bracket orders with automatic take-profit and stop-loss
 - Position conflict prevention through state tracking
+- Turbulence-based position sizing for DRL models
 
 ## 📈 Performance Monitoring
 
@@ -160,14 +200,27 @@ The `logs/` directory contains:
 
 | File | Purpose |
 |------|---------|
-| `tradingbot.py` | Main trading strategy (TSLA focused) |
+| `tradingbot.py` | Main trading strategy (TSLA focused, sentiment-based) |
+| `tradingbot2.py` | Alternative trading strategy implementation |
+| `tradingbot_train.py` | ML model training pipeline using FinRL and DRL ensemble |
+| `DRLEnsemble.py` | Deep Reinforcement Learning ensemble framework (A2C, DDPG, PPO) |
 | `temp.py` | Enhanced strategy with SMA integration (SPY focused) |
-| `runner.py` | Supervisor script with crash recovery |
+| `runner.py` | Supervisor script with crash recovery and ML training |
 | `finbert_utils.py` | FinBERT sentiment analysis implementation |
 | `news.py` | News data retrieval and processing |
 | `SMA Calc.py` | Technical analysis utilities |
 | `mailtest.py` | Email notification testing |
 | `bot_state.pkl` | Persistent state storage |
+| `output.txt` | ML training execution logs and performance metrics |
+
+### Directory Structure
+
+| Directory | Purpose |
+|-----------|---------|
+| `logs/` | Trading execution logs, statistics, and HTML tearsheets |
+| `results/` | Trading performance results and visualization charts |
+| `trained_models/` | Pre-trained DRL models in .zip format (48 models) |
+| `tensorboard_log/` | TensorBoard logs for training monitoring (A2C, DDPG, PPO) |
 
 ## ⚠️ Important Notes
 
@@ -184,9 +237,11 @@ The `logs/` directory contains:
 
 ### Technical Considerations
 - FinBERT requires significant computational resources
-- GPU acceleration recommended for faster sentiment analysis
+- GPU acceleration recommended for faster sentiment analysis and DRL training
+- DRL model training can take several hours depending on hardware
 - Ensure stable internet connection for real-time trading
 - Monitor API rate limits to avoid service interruptions
+- TensorBoard logs and trained models are safe for version control (no sensitive data)
 
 ## 🤝 Contributing
 

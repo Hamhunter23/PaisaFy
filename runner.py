@@ -20,6 +20,13 @@ try:
     mailserver.quit()
 except Exception as e:
     print(f"Failed to send email: {e}")
+    
+with open('output.txt', 'w') as f:
+    if not f.closed:
+        process = subprocess.Popen(['python', 'tradingbot_train.py'], stdout=f, stderr=sys.stdout)
+        process.wait()
+    else:
+        print("Failed to open output.txt")
 
 while count > 0:
     try:
